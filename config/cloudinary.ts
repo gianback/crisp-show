@@ -1,30 +1,22 @@
-import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_PUBLIC_API_KEY, CLOUDINARY_SECRET_KEY } from "@/utilities/constants";
-import {v2 as cloudinary} from "cloudinary"
+import { v2 as cloudinary } from "cloudinary";
+import { Readable } from "stream";
 
-cloudinary.config({ 
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME ?? '', 
-    api_key: process.env.CLOUDINARY_PUBLIC_API_KEY ?? '', 
-    api_secret: process.env.CLOUDINARY_SECRET_KEY ?? '' 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME ?? "",
+  api_key: process.env.CLOUDINARY_PUBLIC_API_KEY ?? "",
+  api_secret: process.env.CLOUDINARY_SECRET_KEY ?? "",
+});
+
+export const handleUploadFile = async (image: Buffer, folder: string) => {
+  return new Promise((res, rej) => {
+    const theTransformStream = cloudinary.uploader.upload_stream(
+      { resource_type: "image", folder },
+      (err, result) => {
+        if (err) return rej(err);
+        res(result);
+      }
+    );
+    let str = Readable.from(image);
+    str.pipe(theTransformStream);
   });
-  
-const onDone = (error:any,result:any) =>{
-  if(error){
-    return { success: false, error }
-  }else{
-   return  { success: true, result }
-  }
-}
-export const handleUploadFile = async (image:any) =>{
-  try {
-    
-    const imageUrl = cloudinary.uploader.upload_stream({ resource_type: "image" }, onDone).end(image)
-    
-    return imageUrl
-
-  } catch (error:any) {
-    console.log(error,"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~mi error~~~~~~~~~~~~~~~~~~~~~~~~~");
-    
-  }
-
-
-}
+};
