@@ -2,3 +2,65 @@ datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
 }
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+model User {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    firstName String
+    lastName  String
+    email     String   @unique
+    order     Order?
+    payment   Payment?
+}
+
+model Category {
+    id        Int       @id @default(autoincrement())
+    createdAt DateTime  @default(now())
+    name      String    @unique @db.VarChar(20)
+    products  Product[]
+}
+
+model Product {
+    id          Int      @id @default(autoincrement())
+    createdAt   DateTime @default(now())
+    name        String   @unique
+    brand       String
+    description String
+    sizes       Int[]    @default([])
+    price       Int
+    pictures    String[]
+    category    Category @relation(fields: [categoryId], references: [id])
+    categoryId  Int
+    Order       Order[]
+}
+
+model Order {
+    id         Int      @id @default(autoincrement())
+    date       DateTime @default(now())
+    totalPrice Int
+    user       User     @relation(fields: [userId], references: [id])
+    userId     Int      @unique
+    product    Product  @relation(fields: [productId], references: [id])
+    productId  Int
+    paid       Boolean  @default(false)
+    payment    Payment?
+}
+
+model Payment {
+    id              Int           @id @default(autoincrement())
+    user            User          @relation(fields: [userId], references: [id])
+    userId          Int           @unique
+    order           Order         @relation(fields: [orderId], references: [id])
+    orderId         Int           @unique
+    method          MethodPayment
+    methodPaymentId String
+}
+
+enum MethodPayment {
+    PAYPAL
+    STRIPE
+}
