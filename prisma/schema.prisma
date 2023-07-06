@@ -1,67 +1,67 @@
-datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id        Int      @id @default(autoincrement())
-    createdAt DateTime @default(now())
-    firstName String
-    lastName  String
-    email     String   @unique
-    password  String
-    order     Order?
-    payment   Payment?
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  order     Order?
+  payment   Payment?
 }
 
 model Category {
-    id        Int       @id @default(autoincrement())
-    createdAt DateTime  @default(now())
-    name      String    @unique @db.VarChar(20)
-    products  Product[]
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  name      String    @unique @db.VarChar(20)
+  products  Product[]
 }
 
 model Product {
-    id          Int      @id @default(autoincrement())
-    createdAt   DateTime @default(now())
-    name        String   @unique
-    brand       String
-    description String
-    sizes       Int[]    @default([])
-    price       Int
-    pictures    String[]
-    category    Category @relation(fields: [categoryId], references: [id])
-    categoryId  Int
-    Order       Order[]
+  id          Int      @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  name        String   @unique
+  brand       String
+  description String
+  sizes       Int[]    @default([])
+  price       Int
+  pictures    String[]
+  categoryId  Int
+  Order       Order[]
+  category    Category @relation(fields: [categoryId], references: [id])
 }
 
 model Order {
-    id         Int      @id @default(autoincrement())
-    date       DateTime @default(now())
-    totalPrice Int
-    user       User     @relation(fields: [userId], references: [id])
-    userId     Int      @unique
-    product    Product  @relation(fields: [productId], references: [id])
-    productId  Int
-    paid       Boolean  @default(false)
-    payment    Payment?
+  id         Int      @id @default(autoincrement())
+  date       DateTime @default(now())
+  totalPrice Int
+  userId     Int      @unique
+  productId  Int
+  paid       Boolean  @default(false)
+  product    Product  @relation(fields: [productId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  payment    Payment?
 }
 
 model Payment {
-    id              Int           @id @default(autoincrement())
-    user            User          @relation(fields: [userId], references: [id])
-    userId          Int           @unique
-    order           Order         @relation(fields: [orderId], references: [id])
-    orderId         Int           @unique
-    method          MethodPayment
-    methodPaymentId String
+  id              Int           @id @default(autoincrement())
+  userId          Int           @unique
+  orderId         Int           @unique
+  method          MethodPayment
+  methodPaymentId String
+  order           Order         @relation(fields: [orderId], references: [id])
+  user            User          @relation(fields: [userId], references: [id])
 }
 
 enum MethodPayment {
-    PAYPAL
-    STRIPE
+  PAYPAL
+  STRIPE
 }

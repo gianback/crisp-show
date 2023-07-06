@@ -1,30 +1,26 @@
-import { prisma } from '@/config/prisma'
-import { NextResponse as res } from 'next/server'
-import {hash} from "bcrypt"
-
+import { prisma } from "@/config/prisma";
+import { NextResponse as res } from "next/server";
+import { hash } from "bcrypt";
 
 export async function POST(request: Request) {
-    const {user} = await request.json()
-    const { email, firstName, lastName, password } = user
+  const { user } = await request.json();
+  const { email, firstName, lastName, password } = user;
 
-    const hashedPassword = await hash(password,10);
+  const hashedPassword = await hash(password, 10);
 
-    const newUser = await prisma.user.create({
-        data: {
-            email,
-            firstName,
-            lastName,
-            password:hashedPassword
-
-        }
-    })
-    return res.json({userCreated:newUser})
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      firstName,
+      lastName,
+      password: hashedPassword,
+    },
+  });
+  return res.json({ userCreated: newUser });
 }
 
-export async function GET(request:Request){
+export async function GET(request: Request) {
+  const users = await prisma.user.findMany();
 
-    const users = await prisma.user.findMany()
-
-    return res.json({users})
-
+  return res.json({ users });
 }
