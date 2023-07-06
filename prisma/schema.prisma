@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime @default(now())
   firstName String
   lastName  String
@@ -19,32 +19,32 @@ model User {
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime  @default(now())
   name      String    @unique @db.VarChar(20)
   products  Product[]
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  name        String   @unique
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt   DateTime  @default(now())
+  name        String    @unique
   brand       String
   description String
-  sizes       Int[]    @default([])
+  sizes       Int[]     @default([])
   price       Int
   pictures    String[]
-  categoryId  Int
   Order       Order[]
-  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String?   @db.Uuid
+  category    Category? @relation(fields: [categoryId], references: [id])
 }
 
 model Order {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   date       DateTime @default(now())
   totalPrice Int
-  userId     Int      @unique
-  productId  Int
+  userId     String   @unique @db.Uuid
+  productId  String   @db.Uuid
   paid       Boolean  @default(false)
   product    Product  @relation(fields: [productId], references: [id])
   user       User     @relation(fields: [userId], references: [id])
@@ -52,11 +52,11 @@ model Order {
 }
 
 model Payment {
-  id              Int           @id @default(autoincrement())
-  userId          Int           @unique
-  orderId         Int           @unique
+  id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String        @unique @db.Uuid
+  orderId         String        @unique @db.Uuid
   method          MethodPayment
-  methodPaymentId String
+  methodPaymentId String        @unique @db.Uuid
   order           Order         @relation(fields: [orderId], references: [id])
   user            User          @relation(fields: [userId], references: [id])
 }
