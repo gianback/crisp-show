@@ -18,5 +18,4 @@ export async function POST(req: Request) {
     console.log(error, "~~~~~~~~~~~~~~~~error~~~~~~");
   }
 
-  //   return NextResponse.json({ test: "t" });
 }
