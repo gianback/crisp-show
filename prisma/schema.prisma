@@ -55,8 +55,8 @@ model Payment {
   id              String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId          String        @unique @db.Uuid
   orderId         String        @unique @db.Uuid
-  method          MethodPayment
-  methodPaymentId String        @unique @db.Uuid
+  registerPaymentId String  
+  method          MethodPayment 
   order           Order         @relation(fields: [orderId], references: [id])
   user            User          @relation(fields: [userId], references: [id])
 }

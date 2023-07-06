@@ -1,4 +1,4 @@
-import { NextResponse as res } from "next/server";
+import { NextResponse, NextResponse as res } from "next/server";
 import { handleUploadFile } from "@/config/cloudinary";
 import { ImageCloudinaryResponse } from "@/interfaces/cloudinary";
 import { prisma } from "@/config/prisma";
@@ -18,25 +18,21 @@ export async function POST(req: Request) {
     })
   );
 
-  //   const newProduct = {
-  //     name: formdata.get("name") as string,
-  //     brand: formdata.get("brand") as string,
-  //     description: formdata.get("description") as string,
-  //     size: formdata.get("size"),
-  //     price: formdata.get("price"),
-  //     pictures: urlsPictures,
-  //   };
-
-  const productCreated = await prisma.product.create({
-    data: {
+     const newProduct = {
       name: formdata.get("name") as string,
       brand: formdata.get("brand") as string,
       description: formdata.get("description") as string,
       price: parseInt(formdata.get("price") as string, 10),
-      sizes: [1, 2, 3],
+      sizes: formdata.getAll('sizes').map((size) => +size),
       pictures: urlsPictures,
-    },
-  });
+     };
+
+  const productCreated = await prisma.product.create({data: newProduct});
 
   return res.json({ mssg: productCreated });
+}
+
+export async function GET(){
+  const products = await prisma.product.findMany()
+  return  res.json(products)
 }
