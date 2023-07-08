@@ -43,12 +43,18 @@ export const productSchema = z.object({
     .nonnegative({
       message: "Please enter a integrer price",
     }),
-  pictures: z
+  otherPictures: z
     .string({
       required_error: "Please enter a picture",
       invalid_type_error: "Please enter a valid picture",
     })
     .array()
+    .nonempty(),
+  mainPicture: z
+    .string({
+      required_error: "Please enter a picture",
+      invalid_type_error: "Please enter a valid picture",
+    })
     .nonempty(),
   categoryId: z
     .string({

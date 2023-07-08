@@ -1,38 +1,45 @@
-import { NextResponse, NextResponse as res } from "next/server";
-import { handleUploadFile } from "@/config/cloudinary";
-import { ImageCloudinaryResponse } from "@/interfaces/cloudinary";
+import { NextResponse as res } from "next/server";
 import { prisma } from "@/config/prisma";
+import { uploadFile } from "@/utilities/uploadFile";
+
 export async function POST(req: Request) {
   const formdata = await req.formData();
 
-  const picturesArray = formdata.getAll("pictures") as File[];
-  const urlsPictures = await Promise.all(
-    picturesArray.map(async (picture) => {
-      const arrayBuffer = await picture.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const { url }: ImageCloudinaryResponse = (await handleUploadFile(
-        buffer,
-        "products"
-      )) as ImageCloudinaryResponse;
-      return url;
-    })
+  const otherPictures = formdata.getAll("otherPictures") as File[];
+
+  const urlsOtherPictures = await Promise.all(
+    otherPictures.map((picture) => uploadFile(picture))
   );
 
-     const newProduct = {
-      name: formdata.get("name") as string,
-      brand: formdata.get("brand") as string,
-      description: formdata.get("description") as string,
-      price: parseInt(formdata.get("price") as string, 10),
-      sizes: formdata.getAll('sizes').map((size) => +size),
-      pictures: urlsPictures,
-     };
+  const urlMainPicture = await uploadFile(formdata.get("mainPicture") as File);
+  const price = +Number(formdata.get("price")).toFixed(2);
 
-  const productCreated = await prisma.product.create({data: newProduct});
+  const newProduct = {
+    name: `${formdata.get("name")}`,
+    brand: `${formdata.get("brand")}`,
+    description: `${formdata.get("description")}`,
+    price,
+    sizes: formdata.getAll("sizes").map((size) => +size),
+    otherPictures: urlsOtherPictures,
+    mainPicture: urlMainPicture,
+    categoryId: `${formdata.get("categoryId")}`,
+  };
 
-  return res.json({ mssg: productCreated });
+  const productCreated = await prisma.product.create({
+    data: newProduct,
+  });
+  return res.json({ productCreated });
 }
 
-export async function GET(){
-  const products = await prisma.product.findMany()
-  return  res.json(products)
+export async function GET() {
+  const products = await prisma.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      brand: true,
+      price: true,
+      mainPicture: true,
+    },
+  });
+  return res.json(products);
 }

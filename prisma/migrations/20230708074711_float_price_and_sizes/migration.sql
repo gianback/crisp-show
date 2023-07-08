@@ -29,10 +29,11 @@ CREATE TABLE "Product" (
     "name" TEXT NOT NULL,
     "brand" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "sizes" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
-    "price" INTEGER NOT NULL,
-    "pictures" TEXT[],
-    "categoryId" UUID,
+    "sizes" DOUBLE PRECISION[] DEFAULT ARRAY[]::DOUBLE PRECISION[],
+    "price" DOUBLE PRECISION NOT NULL,
+    "mainPicture" TEXT NOT NULL,
+    "otherPictures" TEXT[],
+    "categoryId" UUID NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -79,7 +80,7 @@ CREATE UNIQUE INDEX "Payment_userId_key" ON "Payment"("userId");
 CREATE UNIQUE INDEX "Payment_orderId_key" ON "Payment"("orderId");
 
 -- AddForeignKey
-ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD CONSTRAINT "Order_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
