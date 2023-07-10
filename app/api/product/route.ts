@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     brand: `${formdata.get("brand")}`,
     description: `${formdata.get("description")}`,
     price,
-    sizes: formdata.getAll("sizes").map((size) => +size),
+    size: Number(formdata.get("size")),
     otherPictures: urlsOtherPictures,
     mainPicture: urlMainPicture,
     categoryId: `${formdata.get("categoryId")}`,
@@ -31,15 +31,44 @@ export async function POST(req: Request) {
   return res.json({ productCreated });
 }
 
-export async function GET() {
-  const products = await prisma.product.findMany({
-    select: {
-      id: true,
-      name: true,
-      brand: true,
-      price: true,
-      mainPicture: true,
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+
+  const queryBrand = searchParams.get("brand");
+  const queryRange = searchParams.get("range");
+  const queryOffset = +(searchParams.get("offset") as string);
+
+  const [minValue, maxValue] = queryRange?.split("-") || [];
+  const products = await prisma.category.findMany({
+    where: {
+      name: {
+        equals: queryBrand || undefined,
+      },
     },
+    include: {
+      products: {
+        where: {
+          price: {
+            gte: +minValue || 0,
+            lte: +maxValue || 99999,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          brand: true,
+          price: true,
+          mainPicture: true,
+        },
+      },
+    },
+    skip: queryOffset || 0,
+    take: 8,
   });
-  return res.json(products);
+
+  return res.json({
+    products,
+    offset: queryOffset,
+    count: 8 * (queryOffset ? +queryOffset : 1),
+  });
 }

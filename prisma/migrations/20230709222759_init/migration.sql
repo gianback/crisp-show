@@ -29,11 +29,11 @@ CREATE TABLE "Product" (
     "name" TEXT NOT NULL,
     "brand" TEXT NOT NULL,
     "description" TEXT NOT NULL,
-    "sizes" DOUBLE PRECISION[] DEFAULT ARRAY[]::DOUBLE PRECISION[],
     "price" DOUBLE PRECISION NOT NULL,
     "mainPicture" TEXT NOT NULL,
     "otherPictures" TEXT[],
     "categoryId" UUID NOT NULL,
+    "size" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );

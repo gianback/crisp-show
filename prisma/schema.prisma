@@ -31,11 +31,11 @@ model Product {
   name          String   @unique
   brand         String
   description   String
-  sizes         Float[]  @default([])
   price         Float
   mainPicture   String
   otherPictures String[]
   categoryId    String   @db.Uuid
+  size          Float
   order         Order[]
   category      Category @relation(fields: [categoryId], references: [id])
 }

@@ -28,20 +28,21 @@ export const productSchema = z.object({
       invalid_type_error: "Please enter a valid description",
     })
     .nonempty(),
-  sizes: z
+  size: z
     .number({
       required_error: "Please enter a size",
       invalid_type_error: "Please enter a valid size",
     })
-    .array()
-    .nonempty(),
+    .nonnegative({
+      message: "Please enter a positive size",
+    }),
   price: z
     .number({
       required_error: "Please enter a price",
       invalid_type_error: "Please enter a valid price",
     })
     .nonnegative({
-      message: "Please enter a integrer price",
+      message: "Please enter a positive price",
     }),
   otherPictures: z
     .string({
