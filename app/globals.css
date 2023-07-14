@@ -18,9 +18,9 @@
     }
     span {
       height: 0.3rem;
-      width: 2.4rem;
+      width: 2rem;
       transition: transform 0.5s ease, background-color 0.5s ease;
-      @apply bg-primary w-11 h-[4px] inline-block absolute mx-auto rounded-2xl;
+      @apply bg-white inline-block absolute mx-auto;
     }
     span:nth-child(1) {
       transform: translateY(-0.8rem);
