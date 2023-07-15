@@ -1,16 +1,24 @@
-import { FC } from 'react'
+import { useNavbarContext } from '@/context/NavbarContext';
+import { FC } from 'react';
 
 interface MenuIconProps {
-   isActive?: boolean
-   type?: string
+  type?: string;
 }
 
-export const MenuIcon: FC<MenuIconProps> = ({ isActive = false, type = 'hamburguer' }) => {
-   return (
-      <div  className={`menu-icon ${type} ${isActive ? 'change' : null}`}>
-         <span></span>
-         <span></span>
-         <span></span>
-      </div>
-   )
-}
+export const MenuIcon: FC<MenuIconProps> = ({ type = 'hamburguer' }) => {
+  const { setMenuActive, isMenuActive } = useNavbarContext();
+  const handleChangeMenuActive = () => {
+    setMenuActive(!isMenuActive);
+  };
+
+  return (
+    <div
+      className={`menu-icon ${type} ${isMenuActive ? 'change' : null}`}
+      onClick={handleChangeMenuActive}
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  );
+};
