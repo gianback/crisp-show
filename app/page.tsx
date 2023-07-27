@@ -1,5 +1,9 @@
-export default function Home(){
-  return(
-    <h1>hola mundo</h1>
-  )
+import { MainBanner } from '@/components/Home/MainBanner';
+import 'swiper/css';
+export default function Home() {
+  return (
+    <main>
+      <MainBanner />
+    </main>
+  );
 }
