@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import logo from '@/public/logo.png';
 import { NavbarProvider } from '@/context/NavbarContext';
 import { Nabvar } from './Nabvar';
@@ -13,12 +12,15 @@ export function Header() {
       <NavbarProvider>
         <Container className="flex justify-between items-center relative">
           <Nabvar />
-          <Image
-            src={logo.src}
-            width={150}
-            height={150}
-            alt="Logo Crisp-shop"
-          />
+          <picture>
+            <img
+              src={logo.src}
+              width={150}
+              height={150}
+              alt="Logo Crisp-shop"
+              className="z-[20]"
+            />
+          </picture>
           <div className="flex gap-4">
             <IconSearch />
             <IconCart />
