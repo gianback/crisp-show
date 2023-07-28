@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-scroll {
+  overflow: hidden;
+}
+
 /* Menu Icon */
 .menu-icon {
   @apply relative isolate;
