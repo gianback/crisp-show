@@ -9,6 +9,7 @@ export const MenuIcon: FC<MenuIconProps> = ({ type = 'hamburguer' }) => {
   const { setMenuActive, isMenuActive } = useNavbarContext();
   const handleChangeMenuActive = () => {
     setMenuActive(!isMenuActive);
+    document.querySelector('body')?.classList.toggle('no-scroll');
   };
 
   return (
