@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  createdAt DateTime @default(now())
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime  @default(now())
   firstName String
   lastName  String
-  email     String   @unique
+  email     String    @unique
   password  String
-  order     Order?
-  payment   Payment?
+  order     Order[]
+  payment   Payment[]
 }
 
 model Category {
@@ -30,12 +30,11 @@ model Product {
   createdAt     DateTime @default(now())
   name          String   @unique
   brand         String
-  description   String
   price         Float
   mainPicture   String
   otherPictures String[]
   categoryId    String   @db.Uuid
-  size          Float
+  attributes    Json
   order         Order[]
   category      Category @relation(fields: [categoryId], references: [id])
 }
@@ -44,7 +43,7 @@ model Order {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   date       DateTime @default(now())
   totalPrice Int
-  userId     String   @unique @db.Uuid
+  userId     String   @db.Uuid
   productId  String   @db.Uuid
   paid       Boolean  @default(false)
   product    Product  @relation(fields: [productId], references: [id])
@@ -53,8 +52,8 @@ model Order {
 }
 
 model Payment {
-  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId            String        @unique @db.Uuid
+  id                String        @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String        @db.Uuid
   orderId           String        @unique @db.Uuid
   registerPaymentId String
   method            MethodPayment
