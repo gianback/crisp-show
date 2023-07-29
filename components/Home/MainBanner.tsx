@@ -10,10 +10,6 @@ const bannerList = [
   },
   {
     id: 2,
-    img: '/banner-2.jpg',
-  },
-  {
-    id: 3,
     img: '/banner-3.jpg',
   },
 ];
