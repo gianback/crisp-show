@@ -1,28 +1,31 @@
 import { NextResponse as res } from 'next/server';
 import { prisma } from '@/config/prisma';
 import { uploadFile } from '@/utilities/uploadFile';
+import { limiter } from '../config/limiter';
 
 export async function POST(req: Request) {
   const formdata = await req.formData();
 
   const otherPictures = formdata.getAll('otherPictures') as File[];
+  const { name, brand, categoryId, attributes } = Object.fromEntries(formdata);
 
+  /* URLS FROM Cloudinary */
   const urlsOtherPictures = await Promise.all(
     otherPictures.map((picture) => uploadFile(picture)),
   );
-
   const urlMainPicture = await uploadFile(formdata.get('mainPicture') as File);
+
+  /* format price to Float */
   const price = +Number(formdata.get('price')).toFixed(2);
 
   const newProduct = {
-    name: `${formdata.get('name')}`,
-    brand: `${formdata.get('brand')}`,
-    description: `${formdata.get('description')}`,
+    name: name as string,
+    brand: brand as string,
     price,
-    size: Number(formdata.get('size')),
     otherPictures: urlsOtherPictures,
     mainPicture: urlMainPicture,
-    categoryId: `${formdata.get('categoryId')}`,
+    categoryId: categoryId as string,
+    attributes: JSON.parse(attributes as string),
   };
 
   const productCreated = await prisma.product.create({
@@ -33,6 +36,15 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
+
+  const remaining = await limiter.removeTokens(1);
+
+  if (remaining < 0) {
+    return new Response(null, {
+      status: 429,
+      statusText: 'Too many request',
+    });
+  }
 
   const queryBrand = searchParams.get('brand');
   const queryRange = searchParams.get('range');
