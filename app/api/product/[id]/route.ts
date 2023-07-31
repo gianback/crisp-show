@@ -1,8 +1,8 @@
-import { prisma } from "@/config/prisma";
-import { NextResponse as res } from "next/server";
+import { prisma } from '@/config/prisma';
+import { NextResponse as res } from 'next/server';
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  _req: Request,
+  { params }: { params: { id: string } },
 ) {
   const { id } = params;
   const foundProduct = await prisma.product.findUnique({
@@ -13,8 +13,6 @@ export async function GET(
       id: true,
       name: true,
       brand: true,
-      description: true,
-      size: true,
       price: true,
       otherPictures: true,
       category: {
