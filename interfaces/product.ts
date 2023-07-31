@@ -1,4 +1,10 @@
-import { z } from "zod";
-import { productSchema } from "@/utilities/valitador";
-
-export type Product = z.infer<typeof productSchema>;
+export interface Product {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  mainPicture: string;
+  otherPictures: string[];
+  attributes: unknown;
+  categoryId: string;
+}
