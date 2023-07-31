@@ -9,12 +9,15 @@ module.exports = {
     extend: {
       colors: {
         primary: '#016170',
-        secondary: '#00E0C6'
+        secondary: '#00E0C6',
       },
-      screens:{
-        'laptop': '1200px'
-      }
+      screens: {
+        tablet: '768px',
+        tabletxl: '1024px',
+        laptop: '1200px',
+        desktop: '1400px',
+      },
     },
   },
   plugins: [],
-}
+};
