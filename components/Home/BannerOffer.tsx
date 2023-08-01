@@ -2,17 +2,10 @@ import Button from '../Button';
 import { Container } from '../Container';
 
 export function BannerOffer() {
-  const gradiant = {
-    background:
-      'linear-gradient(90deg, rgba(255,255,255,1) 7%, rgba(52,42,228,1) 84%)',
-  };
   return (
-    <div className="bg-white">
+    <div>
       <Container>
-        <div
-          style={gradiant}
-          className="grid grid-cols-2"
-        >
+        <div className="grid grid-cols-2">
           <picture className="flex items-center justify-center">
             <img
               src="/best-price.png"
@@ -25,7 +18,7 @@ export function BannerOffer() {
               Disfruta de los mejores precio, revisa nuestra tienda !
             </p>
             <div>
-              <Button href="/store">Ver tienda</Button>
+              <Button href="/shop">Ver tienda</Button>
             </div>
           </div>
         </div>

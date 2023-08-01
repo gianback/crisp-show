@@ -5,22 +5,22 @@ import { useNavbarContext } from '@/context/NavbarContext';
 const menuList = [
   {
     id: 1,
-    label: 'HOME',
+    label: 'Inicio',
     url: '/',
   },
   {
     id: 2,
-    label: 'SHOP',
+    label: 'Tienda',
     url: '/shop',
   },
   {
     id: 3,
-    label: 'BLOG',
+    label: 'Blog',
     url: '/blog',
   },
   {
     id: 4,
-    label: 'CONTACT US',
+    label: 'Contacto',
     url: '/contact-us',
   },
 ];
