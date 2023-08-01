@@ -1,7 +1,7 @@
 'use client';
 import { Container } from '@/components/Container';
 import { useState } from 'react';
-import { DropDawn } from './product/DropDawn';
+import { DropDown } from './product/DropDown';
 
 export default function Store() {
   const [menuFilerActive, setMenuFilerActive] = useState(false);
@@ -24,9 +24,9 @@ export default function Store() {
             }`}
           >
             filtros y mas filtros
-            <DropDawn title="marca">
+            <DropDown title="marca">
               <p>filtros de marca</p>
-            </DropDawn>
+            </DropDown>
           </div>
         </div>
       </Container>

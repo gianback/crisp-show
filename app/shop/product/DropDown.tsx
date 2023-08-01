@@ -3,7 +3,7 @@ interface DropDawnProps {
   children: JSX.Element | JSX.Element[];
 }
 
-export function DropDawn({ children, title }: DropDawnProps) {
+export function DropDown({ children, title }: DropDawnProps) {
   return (
     <article>
       <div>{title}</div>
